@@ -1,4 +1,6 @@
-﻿using System;
+﻿using InTheHand.Net;
+using InTheHand.Net.Sockets;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,5 +12,6 @@ namespace BTArduino.Models
     {
         public string Name { get; set; }
         public string Description { get; set; }
+        public BluetoothDeviceInfo DeviceInfo { get; set; }
     }
 }

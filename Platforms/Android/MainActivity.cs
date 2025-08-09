@@ -11,16 +11,11 @@ namespace BTArduino
     {
         protected override void OnCreate(Bundle savedInstanceState)
         {
-            base.OnCreate(savedInstanceState);
-            if (Build.VERSION.SdkInt > Android.OS.BuildVersionCodes.R && ActivityCompat.CheckSelfPermission(this, Manifest.Permission.BluetoothConnect) != Permission.Granted)
-            {
-                ActivityCompat.RequestPermissions(Microsoft.Maui.ApplicationModel.Platform.CurrentActivity, new string[] { Android.Manifest.Permission.BluetoothConnect }, 102);
-            }
-            if (Build.VERSION.SdkInt <= Android.OS.BuildVersionCodes.R && ActivityCompat.CheckSelfPermission(this, Manifest.Permission.Bluetooth) != Permission.Granted)
-            {
-                ActivityCompat.RequestPermissions(Microsoft.Maui.ApplicationModel.Platform.CurrentActivity, new string[] { Android.Manifest.Permission.Bluetooth }, 102);
 
-            }
+            //InTheHand.AndroidActivity.CurrentActivity = Platform.CurrentActivity;
+            base.OnCreate(savedInstanceState);
+            InTheHand.AndroidActivity.CurrentActivity = this;
+            RequestPermissions(new string[] { Manifest.Permission.AccessCoarseLocation, Manifest.Permission.BluetoothAdmin, Manifest.Permission.BluetoothConnect, Manifest.Permission.BluetoothScan }, 1);
         }
     }
 

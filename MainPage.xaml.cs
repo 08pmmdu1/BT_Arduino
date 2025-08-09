@@ -4,6 +4,7 @@ using InTheHand.Net.Sockets;
 using Microsoft.Maui.Controls.PlatformConfiguration;
 using Plugin.BLE;
 using Plugin.BluetoothClassic.Abstractions;
+using static Microsoft.Maui.ApplicationModel.Permissions;
 
 namespace BTArduino
 {
@@ -47,21 +48,38 @@ namespace BTArduino
 
         private async void OnScanButtonCliked(object sender, EventArgs e)
         {
-            var btDevices = new List<string>();
-            PermissionStatus status = await Permissions.RequestAsync<Permissions.Bluetooth>();
+
+            //PermissionStatus status = await Permissions.RequestAsync<Permissions.Bluetooth>();
 
             BluetoothClient client = new BluetoothClient();
-            btDevices.Clear();
-            //var t = await client.DiscoverDevicesAsync();
-            var t = new List<BluetoothDeviceInfo>();
-            await foreach (var foundDevice in client.DiscoverDevicesAsync())
+            var devices = client.DiscoverDevices();
+            var tmpDevices = new List<BTDevice>();
+
+            foreach (var device in devices)
             {
-                //t.Add(foundDevice);
-                System.Diagnostics.Debug.WriteLine($"MAUI Discovered: {foundDevice.DeviceName} {foundDevice.DeviceAddress}");
+                tmpDevices.Add(new BTDevice() { Name = device.DeviceName, Description = device.DeviceName, DeviceInfo = device });
             }
+
+            btDevices.ItemsSource = tmpDevices;
 
             btState.Text = "";//ble.State.ToString();
         }
+
+        private async void OnConnectButtonCliked(object sender, EventArgs e)
+        {
+            var selectedDevice = btDevices.SelectedItem as BTDevice;
+            BluetoothClient client = new BluetoothClient();
+
+            if (selectedDevice != null)
+            {
+                if (!selectedDevice.DeviceInfo.Authenticated)
+                {
+                    bool paired = BluetoothSecurity.PairRequest(selectedDevice.DeviceInfo.DeviceAddress, null);
+                    await Task.Delay(1000);
+                }
+            }
+        }
+
 
         private void OnCounterClicked(object? sender, EventArgs e)
         {

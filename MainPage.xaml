@@ -23,6 +23,8 @@
             
             <Button Text="Scan" 
             Clicked="OnScanButtonCliked"/>
+            <Button Text="Connect" 
+            Clicked="OnConnectButtonCliked"/>
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>
